@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Grammar Scoring Engine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f4f4f4;
+      text-align: center;
+    }
+    #results {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #diff {
+      text-align: left;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 6px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    ins {
+      background-color: #d4fcbc;
+      text-decoration: none;
+    }
+    del {
+      background-color: #ffb6b6;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎤 Grammar Scoring Engine</h1>
+  <p>Click below to start recording your voice</p>
+
+  <button id="recordButton">🎙️ Record</button>
+  <button id="stopButton" disabled>🛑 Stop</button>
+
+  <div id="results" style="display: none;">
+    <h3>📜 Transcribed Text</h3>
+    <p id="transcribed"></p>
+
+    <h3>✅ Corrected Text</h3>
+    <p id="corrected"></p>
+
+    <h3>🔢 Grammar Score (out of 10)</h3>
+    <p id="score"></p>
+
+    <h3>🆚 Diff (Before ➡ After)</h3>
+    <div id="diff"></div>
+  </div>
+
+  <script>
+    let mediaRecorder;
+    let audioChunks = [];
+
+    const recordButton = document.getElementById('recordButton');
+    const stopButton = document.getElementById('stopButton');
+
+    recordButton.addEventListener('click', async () => {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      audioChunks = [];
+
+      mediaRecorder.addEventListener('dataavailable', event => {
+        audioChunks.push(event.data);
+      });
+
+      mediaRecorder.addEventListener('stop', async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const formData = new FormData();
+        formData.append('audio', audioBlob, 'recording.webm');
+
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        document.getElementById('results').style.display = 'block';
+        document.getElementById('transcribed').innerText = result.transcribed;
+        document.getElementById('corrected').innerText = result.corrected;
+        document.getElementById('score').innerText = result.score;
+        document.getElementById('diff').innerHTML = result.diff_html;
+      });
+
+      recordButton.disabled = true;
+      stopButton.disabled = false;
+    });
+
+    stopButton.addEventListener('click', () => {
+      mediaRecorder.stop();
+      recordButton.disabled = false;
+      stopButton.disabled = true;
+    });
+  </script>
+</body>
+</html>
