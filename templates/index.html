@@ -4,41 +4,100 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Grammar Scoring Engine</title>
-  <style>
+    <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 40px;
-      background-color: #f4f4f4;
+      background: linear-gradient(to right, #f4f6f8, #e9eef2);
       text-align: center;
+      color: #333;
     }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #2b2d42;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    button {
+      margin: 10px 10px;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: bold;
+      background-color: #2b2d42;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
+      background-color: #1a1c2c;
+    }
+
     #results {
       margin-top: 30px;
-      padding: 20px;
+      padding: 25px;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      text-align: left;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    button {
+
+    #results h3 {
+      color: #1f4068;
       margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
+      font-size: 1.2rem;
     }
+
+    #results p {
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
     #diff {
       text-align: left;
-      background: #f9f9f9;
-      padding: 10px;
+      background: #f3f3f3;
+      padding: 12px;
       border-radius: 6px;
-      font-family: monospace;
+      font-family: 'Courier New', monospace;
       white-space: pre-wrap;
+      border-left: 5px solid #ddd;
     }
+
     ins {
-      background-color: #d4fcbc;
+      background-color: #caffbf;
       text-decoration: none;
+      padding: 2px 4px;
+      border-radius: 4px;
     }
+
     del {
-      background-color: #ffb6b6;
+      background-color: #ffadad;
+      text-decoration: line-through;
+      padding: 2px 4px;
+      border-radius: 4px;
     }
   </style>
+
 </head>
 <body>
   <h1>🎤 Grammar Scoring Engine</h1>
