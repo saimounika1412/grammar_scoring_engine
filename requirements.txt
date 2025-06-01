@@ -4,3 +4,6 @@ transformers
 torchaudio
 diff-match-patch
 pydub
+whisper
+werkzeug
+openai-whisper
